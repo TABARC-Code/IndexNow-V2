@@ -1,0 +1,9 @@
+/* IndexNow admin: minimal. WP already has a UI system; we’re not here to re-invent it. */
+
+.wrap .description {
+    max-width: 900px;
+}
+
+.widefat th {
+    width: 180px;
+}
