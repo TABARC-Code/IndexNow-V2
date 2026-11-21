@@ -105,17 +105,17 @@ final class Submitter {
         $urls = array_values(array_unique($urls));
 
         if (empty($urls)) {
-            return new WP_Error('indexnow_no_urls', __('No valid URLs to submit.', 'indexnow'));
+            return new WP_Error('indexnow_no_urls', __('No valid URLs to submit.', 'tabarc-indexnow'));
         }
 
         $key = trim((string) ($opts['key'] ?? ''));
         if ($key === '') {
-            return new WP_Error('indexnow_no_key', __('IndexNow key is not configured.', 'indexnow'));
+            return new WP_Error('indexnow_no_key', __('IndexNow key is not configured.', 'tabarc-indexnow'));
         }
 
         $endpoint = esc_url_raw((string) ($opts['endpoint'] ?? ''));
         if ($endpoint === '') {
-            return new WP_Error('indexnow_bad_endpoint', __('IndexNow endpoint is invalid.', 'indexnow'));
+            return new WP_Error('indexnow_bad_endpoint', __('IndexNow endpoint is invalid.', 'tabarc-indexnow'));
         }
 
         $keyLocation = '';
@@ -150,7 +150,7 @@ final class Submitter {
 
         if ($code < 200 || $code >= 300) {
             self::debug_log('Submit failed (HTTP ' . $code . '): ' . substr($body, 0, 500), $opts);
-            return new WP_Error('indexnow_http_error', sprintf(__('IndexNow returned HTTP %d.', 'indexnow'), $code), [
+            return new WP_Error('indexnow_http_error', sprintf(__('IndexNow returned HTTP %d.', 'tabarc-indexnow'), $code), [
                 'status' => $code,
                 'body' => $body,
             ]);
@@ -200,7 +200,7 @@ final class Submitter {
     public static function verify_key_location(array $opts) {
         $key = trim((string) ($opts['key'] ?? ''));
         if ($key === '') {
-            return new WP_Error('indexnow_no_key', __('IndexNow key is not configured.', 'indexnow'));
+            return new WP_Error('indexnow_no_key', __('IndexNow key is not configured.', 'tabarc-indexnow'));
         }
 
         $url = !empty($opts['key_location'])
@@ -216,7 +216,7 @@ final class Submitter {
         $body = trim((string) wp_remote_retrieve_body($resp));
 
         if ($code !== 200) {
-            return new WP_Error('indexnow_key_not_found', sprintf(__('Key location returned HTTP %d.', 'indexnow'), $code), [
+            return new WP_Error('indexnow_key_not_found', sprintf(__('Key location returned HTTP %d.', 'tabarc-indexnow'), $code), [
                 'status' => $code,
                 'url' => $url,
             ]);
@@ -224,7 +224,7 @@ final class Submitter {
 
         $out = ['ok' => true, 'url' => $url];
         if ($body === '') {
-            $out['note'] = __('Key file is reachable but empty. This may still work, but check your setup.', 'indexnow');
+            $out['note'] = __('Key file is reachable but empty. This may still work, but check your setup.', 'tabarc-indexnow');
         }
         return $out;
     }

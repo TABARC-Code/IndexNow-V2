@@ -27,8 +27,8 @@ final class Admin {
 
     public static function menu(): void {
         add_options_page(
-            __('IndexNow', 'indexnow'),
-            __('IndexNow', 'indexnow'),
+            __('IndexNow', 'tabarc-indexnow'),
+            __('IndexNow', 'tabarc-indexnow'),
             'manage_options',
             self::PAGE,
             [__CLASS__, 'render']
@@ -72,7 +72,7 @@ final class Admin {
 
             case 'clear_queue':
                 Submitter::clear_queue();
-                add_settings_error('indexnow_messages', 'indexnow_queue_cleared', __('Queue cleared.', 'indexnow'), 'updated');
+                add_settings_error('indexnow_messages', 'indexnow_queue_cleared', __('Queue cleared.', 'tabarc-indexnow'), 'updated');
                 break;
         }
     }
@@ -106,13 +106,13 @@ final class Admin {
 
         Options::update($opts);
 
-        add_settings_error('indexnow_messages', 'indexnow_saved', __('Settings saved.', 'indexnow'), 'updated');
+        add_settings_error('indexnow_messages', 'indexnow_saved', __('Settings saved.', 'tabarc-indexnow'), 'updated');
     }
 
     private static function handle_submit_now(): void {
         $queue_count = Submitter::get_queue_count();
         if ($queue_count <= 0) {
-            add_settings_error('indexnow_messages', 'indexnow_no_queue', __('Queue is empty. Nothing to submit.', 'indexnow'), 'updated');
+            add_settings_error('indexnow_messages', 'indexnow_no_queue', __('Queue is empty. Nothing to submit.', 'tabarc-indexnow'), 'updated');
             return;
         }
 
@@ -121,9 +121,9 @@ final class Admin {
 
         $last = Submitter::get_last_result();
         if (!empty($last['ok'])) {
-            add_settings_error('indexnow_messages', 'indexnow_submit_ok', __('Submission attempted. Check “Last Result” below.', 'indexnow'), 'updated');
+            add_settings_error('indexnow_messages', 'indexnow_submit_ok', __('Submission attempted. Check “Last Result” below.', 'tabarc-indexnow'), 'updated');
         } else {
-            add_settings_error('indexnow_messages', 'indexnow_submit_fail', __('Submission failed. Check “Last Result” below.', 'indexnow'), 'error');
+            add_settings_error('indexnow_messages', 'indexnow_submit_fail', __('Submission failed. Check “Last Result” below.', 'tabarc-indexnow'), 'error');
         }
     }
 
@@ -135,7 +135,7 @@ final class Admin {
             return;
         }
 
-        $msg = __('Key file is reachable.', 'indexnow');
+        $msg = __('Key file is reachable.', 'tabarc-indexnow');
         if (!empty($r['note'])) {
             $msg .= ' ' . $r['note'];
         }
@@ -145,7 +145,7 @@ final class Admin {
 
     public static function render(): void {
         if (!current_user_can('manage_options')) {
-            wp_die(esc_html__('You do not have permission to access this page.', 'indexnow'));
+            wp_die(esc_html__('You do not have permission to access this page.', 'tabarc-indexnow'));
         }
 
         $opts = Options::get();
@@ -157,10 +157,10 @@ final class Admin {
         $public_pts = get_post_types(['public' => true], 'objects');
         ?>
         <div class="wrap">
-            <h1><?php echo esc_html__('IndexNow', 'indexnow'); ?></h1>
+            <h1><?php echo esc_html__('IndexNow', 'tabarc-indexnow'); ?></h1>
 
             <p class="description">
-                <?php echo esc_html__('Conservative IndexNow submission. Batches updates, avoids spam, and tries not to create new problems.', 'indexnow'); ?>
+                <?php echo esc_html__('Conservative IndexNow submission. Batches updates, avoids spam, and tries not to create new problems.', 'tabarc-indexnow'); ?>
             </p>
 
             <form method="post">
@@ -169,47 +169,47 @@ final class Admin {
 
                 <table class="form-table" role="presentation">
                     <tr>
-                        <th scope="row"><?php echo esc_html__('Enabled', 'indexnow'); ?></th>
+                        <th scope="row"><?php echo esc_html__('Enabled', 'tabarc-indexnow'); ?></th>
                         <td>
                             <label>
                                 <input type="checkbox" name="<?php echo esc_attr(Options::KEY); ?>[enabled]" value="1" <?php checked(1, (int) $opts['enabled']); ?> />
-                                <?php echo esc_html__('Queue and submit URLs on publish/update/delete.', 'indexnow'); ?>
+                                <?php echo esc_html__('Queue and submit URLs on publish/update/delete.', 'tabarc-indexnow'); ?>
                             </label>
                         </td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><?php echo esc_html__('IndexNow Key', 'indexnow'); ?></th>
+                        <th scope="row"><?php echo esc_html__('IndexNow Key', 'tabarc-indexnow'); ?></th>
                         <td>
                             <input class="regular-text" type="text" name="<?php echo esc_attr(Options::KEY); ?>[key]" value="<?php echo esc_attr($opts['key']); ?>" autocomplete="off" />
                             <p class="description">
-                                <?php echo esc_html__('Paste the key value (not the filename, not a URL).', 'indexnow'); ?>
+                                <?php echo esc_html__('Paste the key value (not the filename, not a URL).', 'tabarc-indexnow'); ?>
                             </p>
                         </td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><?php echo esc_html__('Endpoint', 'indexnow'); ?></th>
+                        <th scope="row"><?php echo esc_html__('Endpoint', 'tabarc-indexnow'); ?></th>
                         <td>
                             <input class="regular-text" type="url" name="<?php echo esc_attr(Options::KEY); ?>[endpoint]" value="<?php echo esc_attr($opts['endpoint']); ?>" />
                             <p class="description">
-                                <?php echo esc_html__('Default is Bing. Change only if you know exactly why you are changing it.', 'indexnow'); ?>
+                                <?php echo esc_html__('Default is Bing. Change only if you know exactly why you are changing it.', 'tabarc-indexnow'); ?>
                             </p>
                         </td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><?php echo esc_html__('Key Location URL (optional)', 'indexnow'); ?></th>
+                        <th scope="row"><?php echo esc_html__('Key Location URL (optional)', 'tabarc-indexnow'); ?></th>
                         <td>
                             <input class="regular-text" type="url" name="<?php echo esc_attr(Options::KEY); ?>[key_location]" value="<?php echo esc_attr($opts['key_location']); ?>" />
                             <p class="description">
-                                <?php echo esc_html__('Leave blank to use https://yoursite.com/<key>.txt', 'indexnow'); ?>
+                                <?php echo esc_html__('Leave blank to use https://yoursite.com/<key>.txt', 'tabarc-indexnow'); ?>
                             </p>
                         </td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><?php echo esc_html__('Post Types', 'indexnow'); ?></th>
+                        <th scope="row"><?php echo esc_html__('Post Types', 'tabarc-indexnow'); ?></th>
                         <td>
                             <?php foreach ($public_pts as $pt => $obj): ?>
                                 <label style="display:block; margin: 2px 0;">
@@ -224,131 +224,131 @@ final class Admin {
                                 </label>
                             <?php endforeach; ?>
                             <p class="description">
-                                <?php echo esc_html__('Only published items are submitted.', 'indexnow'); ?>
+                                <?php echo esc_html__('Only published items are submitted.', 'tabarc-indexnow'); ?>
                             </p>
                         </td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><?php echo esc_html__('Sitemap (optional)', 'indexnow'); ?></th>
+                        <th scope="row"><?php echo esc_html__('Sitemap (optional)', 'tabarc-indexnow'); ?></th>
                         <td>
                             <label>
                                 <input type="checkbox" name="<?php echo esc_attr(Options::KEY); ?>[submit_sitemap]" value="1" <?php checked(1, (int) $opts['submit_sitemap']); ?> />
-                                <?php echo esc_html__('Also queue sitemap URL when content changes.', 'indexnow'); ?>
+                                <?php echo esc_html__('Also queue sitemap URL when content changes.', 'tabarc-indexnow'); ?>
                             </label>
                             <p>
                                 <input class="regular-text" type="text" name="<?php echo esc_attr(Options::KEY); ?>[sitemap_path]" value="<?php echo esc_attr($opts['sitemap_path']); ?>" />
                             </p>
                             <p class="description">
-                                <?php echo esc_html__('Path only. Example: /sitemap.xml or /sitemap_index.xml', 'indexnow'); ?>
+                                <?php echo esc_html__('Path only. Example: /sitemap.xml or /sitemap_index.xml', 'tabarc-indexnow'); ?>
                             </p>
                         </td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><?php echo esc_html__('Rate Limits', 'indexnow'); ?></th>
+                        <th scope="row"><?php echo esc_html__('Rate Limits', 'tabarc-indexnow'); ?></th>
                         <td>
                             <label>
-                                <?php echo esc_html__('Max URLs per submit', 'indexnow'); ?>
+                                <?php echo esc_html__('Max URLs per submit', 'tabarc-indexnow'); ?>
                                 <input type="number" min="1" max="1000" name="<?php echo esc_attr(Options::KEY); ?>[max_urls_per_submit]" value="<?php echo esc_attr((string) $opts['max_urls_per_submit']); ?>" style="width: 120px;" />
                             </label>
                             <p>
                                 <label>
-                                    <?php echo esc_html__('Minimum seconds between submits', 'indexnow'); ?>
+                                    <?php echo esc_html__('Minimum seconds between submits', 'tabarc-indexnow'); ?>
                                     <input type="number" min="0" max="3600" name="<?php echo esc_attr(Options::KEY); ?>[min_seconds_between_submits]" value="<?php echo esc_attr((string) $opts['min_seconds_between_submits']); ?>" style="width: 120px;" />
                                 </label>
                             </p>
                             <p class="description">
-                                <?php echo esc_html__('Stops repeated admin saves from hammering remote endpoints.', 'indexnow'); ?>
+                                <?php echo esc_html__('Stops repeated admin saves from hammering remote endpoints.', 'tabarc-indexnow'); ?>
                             </p>
                         </td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><?php echo esc_html__('Debug Logging', 'indexnow'); ?></th>
+                        <th scope="row"><?php echo esc_html__('Debug Logging', 'tabarc-indexnow'); ?></th>
                         <td>
                             <label>
                                 <input type="checkbox" name="<?php echo esc_attr(Options::KEY); ?>[debug]" value="1" <?php checked(1, (int) $opts['debug']); ?> />
-                                <?php echo esc_html__('Write basic events to PHP error log.', 'indexnow'); ?>
+                                <?php echo esc_html__('Write basic events to PHP error log.', 'tabarc-indexnow'); ?>
                             </label>
                             <p class="description">
-                                <?php echo esc_html__('Off by default. Logs become liabilities. Use sparingly.', 'indexnow'); ?>
+                                <?php echo esc_html__('Off by default. Logs become liabilities. Use sparingly.', 'tabarc-indexnow'); ?>
                             </p>
                         </td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><?php echo esc_html__('Uninstall Behaviour', 'indexnow'); ?></th>
+                        <th scope="row"><?php echo esc_html__('Uninstall Behaviour', 'tabarc-indexnow'); ?></th>
                         <td>
                             <label>
                                 <input type="checkbox" name="<?php echo esc_attr(Options::KEY); ?>[purge_on_uninstall]" value="1" <?php checked(1, (int) $opts['purge_on_uninstall']); ?> />
-                                <?php echo esc_html__('Purge plugin settings on uninstall.', 'indexnow'); ?>
+                                <?php echo esc_html__('Purge plugin settings on uninstall.', 'tabarc-indexnow'); ?>
                             </label>
                         </td>
                     </tr>
                 </table>
 
                 <p class="submit">
-                    <button class="button button-primary" type="submit"><?php echo esc_html__('Save Changes', 'indexnow'); ?></button>
+                    <button class="button button-primary" type="submit"><?php echo esc_html__('Save Changes', 'tabarc-indexnow'); ?></button>
                 </p>
             </form>
 
             <hr />
 
-            <h2><?php echo esc_html__('Tools', 'indexnow'); ?></h2>
+            <h2><?php echo esc_html__('Tools', 'tabarc-indexnow'); ?></h2>
 
             <p>
-                <?php echo esc_html__('Queue size:', 'indexnow'); ?>
+                <?php echo esc_html__('Queue size:', 'tabarc-indexnow'); ?>
                 <strong><?php echo esc_html((string) $queue_count); ?></strong>
             </p>
 
             <form method="post" style="display:inline-block; margin-right: 8px;">
                 <?php wp_nonce_field(self::NONCE_ACTION, self::NONCE_NAME); ?>
                 <input type="hidden" name="indexnow_action" value="verify_key" />
-                <button class="button"><?php echo esc_html__('Verify Key File', 'indexnow'); ?></button>
+                <button class="button"><?php echo esc_html__('Verify Key File', 'tabarc-indexnow'); ?></button>
             </form>
 
             <form method="post" style="display:inline-block; margin-right: 8px;">
                 <?php wp_nonce_field(self::NONCE_ACTION, self::NONCE_NAME); ?>
                 <input type="hidden" name="indexnow_action" value="submit_now" />
-                <button class="button button-secondary"><?php echo esc_html__('Submit Queue Now', 'indexnow'); ?></button>
+                <button class="button button-secondary"><?php echo esc_html__('Submit Queue Now', 'tabarc-indexnow'); ?></button>
             </form>
 
             <form method="post" style="display:inline-block;">
                 <?php wp_nonce_field(self::NONCE_ACTION, self::NONCE_NAME); ?>
                 <input type="hidden" name="indexnow_action" value="clear_queue" />
-                <button class="button"><?php echo esc_html__('Clear Queue', 'indexnow'); ?></button>
+                <button class="button"><?php echo esc_html__('Clear Queue', 'tabarc-indexnow'); ?></button>
             </form>
 
-            <h2 style="margin-top: 20px;"><?php echo esc_html__('Last Result', 'indexnow'); ?></h2>
+            <h2 style="margin-top: 20px;"><?php echo esc_html__('Last Result', 'tabarc-indexnow'); ?></h2>
             <?php if (empty($last)): ?>
-                <p class="description"><?php echo esc_html__('No submissions attempted yet.', 'indexnow'); ?></p>
+                <p class="description"><?php echo esc_html__('No submissions attempted yet.', 'tabarc-indexnow'); ?></p>
             <?php else: ?>
                 <table class="widefat striped" style="max-width: 900px;">
                     <tbody>
                         <tr>
-                            <th><?php echo esc_html__('Time', 'indexnow'); ?></th>
+                            <th><?php echo esc_html__('Time', 'tabarc-indexnow'); ?></th>
                             <td><?php echo esc_html(date_i18n('Y-m-d H:i:s', (int) ($last['time'] ?? time()))); ?></td>
                         </tr>
                         <tr>
-                            <th><?php echo esc_html__('OK', 'indexnow'); ?></th>
+                            <th><?php echo esc_html__('OK', 'tabarc-indexnow'); ?></th>
                             <td><?php echo !empty($last['ok']) ? '<strong>Yes</strong>' : '<strong>No</strong>'; ?></td>
                         </tr>
                         <?php if (!empty($last['endpoint'])): ?>
                             <tr>
-                                <th><?php echo esc_html__('Endpoint', 'indexnow'); ?></th>
+                                <th><?php echo esc_html__('Endpoint', 'tabarc-indexnow'); ?></th>
                                 <td><code><?php echo esc_html($last['endpoint']); ?></code></td>
                             </tr>
                         <?php endif; ?>
                         <?php if (!empty($last['submitted'])): ?>
                             <tr>
-                                <th><?php echo esc_html__('Submitted', 'indexnow'); ?></th>
+                                <th><?php echo esc_html__('Submitted', 'tabarc-indexnow'); ?></th>
                                 <td><?php echo esc_html((string) $last['submitted']); ?></td>
                             </tr>
                         <?php endif; ?>
                         <?php if (empty($last['ok'])): ?>
                             <tr>
-                                <th><?php echo esc_html__('Error', 'indexnow'); ?></th>
+                                <th><?php echo esc_html__('Error', 'tabarc-indexnow'); ?></th>
                                 <td>
                                     <code><?php echo esc_html((string) ($last['error_code'] ?? 'unknown')); ?></code><br />
                                     <?php echo esc_html((string) ($last['error_message'] ?? '')); ?>

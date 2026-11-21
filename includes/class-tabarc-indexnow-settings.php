@@ -104,7 +104,8 @@ final class Settings {
 
 		check_admin_referer(self::NONCE_ACTION, self::NONCE_NAME);
 
-		$raw = $_POST[self::OPTION_KEY] ?? [];
+		// Each field is unslashed and sanitised individually below.
+		$raw = $_POST[self::OPTION_KEY] ?? []; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
 		$raw = is_array($raw) ? $raw : [];
 
 		$opt = self::get();
