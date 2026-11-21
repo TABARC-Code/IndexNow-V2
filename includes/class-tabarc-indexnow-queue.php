@@ -104,11 +104,10 @@ final class Queue {
 		$urls = array_keys(self::$urls);
 		self::$urls = [];
 
-		$res = Sender::submit_urls($urls);
+		Sender::submit_urls($urls);
 
 		// If it fails, we don’t requeue. It’s a deliberate choice.
 		// Otherwise the site becomes a queue that never drains, and you’ll hate me later.
 		// TODO (if needed): persist failed URLs with an upper bound and manual retry button.
-		(void) $res;
 	}
 }
