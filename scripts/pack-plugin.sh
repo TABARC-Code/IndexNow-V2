@@ -6,7 +6,7 @@ OUT="${ROOT}/dist"
 mkdir -p "${OUT}"
 
 MAIN_FILE="${ROOT}/indexnow.php"
-VERSION="$(php -r "preg_match('/Version:\s*([^\s]+)/', file_get_contents('${MAIN_FILE}'), $m); echo $m[1] ?? '0.0.0';")"
+VERSION="$(php -r 'preg_match("/Version:\\s*([^\\s]+)/", file_get_contents($argv[1]), $m); echo $m[1] ?? "0.0.0";' "${MAIN_FILE}")"
 ZIP="${OUT}/IndexNow-${VERSION}.zip"
 
 rm -f "${ZIP}"

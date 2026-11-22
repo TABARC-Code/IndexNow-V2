@@ -5,6 +5,7 @@
  * Description: Hardened IndexNow submission plugin for WordPress. Batching, queueing, manual tools, and paranoid defaults.
  * Version: 2.0.0.1
  * Author: TABARC-Code
+ * Requires PHP: 8.0
  * Text Domain: tabarc-indexnow
  * Domain Path: /languages
  *

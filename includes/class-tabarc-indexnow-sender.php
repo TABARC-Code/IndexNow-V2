@@ -40,17 +40,16 @@ final class Sender {
 
 		$endpoint = $opt['endpoint'] ?: 'https://www.bing.com/indexnow';
 
-		// If keyLocation is provided, append it as query parameter (supported by Bing’s IndexNow GET example).
-		// For POST, the protocol still allows using endpoint query params; Bing supports keyLocation in practice.
-		if (!empty($opt['key_location'])) {
-			$endpoint = add_query_arg('keyLocation', rawurlencode($opt['key_location']), $endpoint);
-		}
-
 		$payload = [
 			'host'    => $host,
 			'key'     => $opt['indexnow_key'],
 			'urlList' => $urls,
 		];
+
+		// keyLocation belongs in the JSON body. Putting it in the query string got it double encoded.
+		if (!empty($opt['key_location'])) {
+			$payload['keyLocation'] = $opt['key_location'];
+		}
 
 		$args = [
 			'timeout'     => 10,
@@ -63,7 +62,7 @@ final class Sender {
 
 		// Grey-hat-ish note:
 		// We’re not retrying aggressively. If the endpoint is down, hammering it is just self-harm with extra steps.
-		$resp = wp_remote_post($endpoint, $args);
+		$resp = wp_safe_remote_post($endpoint, $args);
 
 		if (is_wp_error($resp)) {
 			self::maybe_log('IndexNow request failed: ' . $resp->get_error_message());
@@ -101,15 +100,14 @@ final class Sender {
 			return;
 		}
 
-		$sitemap_url = home_url($opt['sitemap_path'] ?: '/sitemap.xml');
-		$res = self::submit_urls([$sitemap_url]);
-
-		// If it fails, we still rate-limit a bit, otherwise you get a spam cannon on every request.
-		set_transient($key, 1, 12 * HOUR_IN_SECONDS);
-
-		if (is_wp_error($res)) {
-			self::maybe_log('Sitemap submit failed: ' . $res->get_error_message());
+		// No key yet means nothing could be sent, so don't burn the rate limit window.
+		if (empty($opt['indexnow_key'])) {
+			return;
 		}
+
+		// Queue it so it goes out with the batch at shutdown, not as a separate blocking request during the save.
+		Queue::enqueue(home_url($opt['sitemap_path'] ?: '/sitemap.xml'));
+		set_transient($key, 1, 12 * HOUR_IN_SECONDS);
 	}
 
 	private static function maybe_log(string $msg): void {
